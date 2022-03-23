@@ -11,7 +11,7 @@ import model.entities.Reservation;
 public class Program {
 
 	public static void main(String[] args) throws ParseException {
-		// Solução 1 - Muito ruim: Lógica de validação no programa principal
+		// Solução 2 - Ruim: Método retornando string
 		
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner (System.in);
@@ -38,16 +38,12 @@ public class Program {
 			System.out.print("Check-out date (dd/MM/yyyy): ");
 			checkOut = sdf.parse(sc.next());
 			
-			Date now = new Date();
-			
-			if (checkIn.before(now) || checkOut.before(now)) {
-				System.out.println("Error in reservation: Reservation dates for update must be a future date");
-			}
-			else if (!checkOut.after(checkIn)) {
-				System.out.println("Error in reservation: Check-out date must be after check-in date");
+			// a validação acima não pode ser feita por método, pois o construtor deveria realizar a validação e ele não pode retornar.
+			String error = reservation.updateDates(checkIn, checkOut);
+			if (error != null) {
+				System.out.println("Error in reservation: " + error);
 			}
 			else {
-				reservation.updateDates(checkIn, checkOut);
 				System.out.println("Reservation: " + reservation);
 			}
 		}
